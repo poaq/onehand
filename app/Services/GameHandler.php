@@ -34,10 +34,10 @@ class GameHandler
         return $this->game->playGame($bet);
     }
 
-    public function play($multiple)
-    {
-        return $this->game->playMultipleGames($multiple);
-    }
+//    public function play($multiple)
+//    {
+//        return $this->game->playMultipleGames($multiple);
+//    }
 
 
 }

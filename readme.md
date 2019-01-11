@@ -4,6 +4,11 @@ Command app that provide one hand bandit functionality.
 
 To start run:
 
-php artisan game:start {amount}
+php artisan game:start 
 
-in amount you should provide int < 1
+next answer on question with int
+
+1 = 1 euro
+1 = 100 cents
+
+Project isnt build on matrix and state pattern. 

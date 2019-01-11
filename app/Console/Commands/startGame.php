@@ -31,7 +31,19 @@ class startGame extends Command
 
 
             $amount = $this->ask('What amount you want to bet?');
-            $ewsult = $handler->playGame($amount);
+
+            if ($amount > 0) {
+                $game = $handler->playGame($amount);
+
+                $results = json_encode($game);
+
+                $this->info($results);
+            }
+
+            else
+                {
+                    $this->info('Please provide Euro amount: minimum 1');
+                }
 
 
 

@@ -117,40 +117,46 @@ class Game implements GameParams
 
         if(count($wins) > 0) {
         $reward = $this->checkValue($wins['Count']);
-        }
-
         $won = $this->CalculateWin($bet, $reward);
+        }
 
         $board['Board'] = array_merge(...$BoardLines);
 
         if(!$wins){
 
            $data = [
-               [
                    self::Bet_amount => $bet,
                    self::Paylines => 0,
-                   self::Total_win => $won,
+                   self::Total_win => $reward,
                    self::Board => array_first($board)
-               ]
            ];
 
            return $this->data = $data;
         }
-        $Balance = [self::Total_win => $won];
+        $Balance = ['Total_Win' => $won];
 
         $part1 = array_merge($wins, $Balance, $board);
         $part2 = [self::Bet_amount => $bet];
-        $data = [array_merge($part2, $part1)];
+        $data = array_merge($part2, $part1);
 
         return $this->data = $data;
     }
 
 
-    private function CalculateWin(int $bet, int $rewardRatio): int
+    /**
+     * @param int $bet
+     * @param float $rewardRatio
+     * @return float|int
+     */
+    private function CalculateWin(int $bet, float $rewardRatio)
     {
         return $value = $bet * $rewardRatio;
     }
 
+    /**
+     * @param int $value
+     * @return float|int
+     */
     private function checkValue(int $value)
     {
         switch($value)
@@ -195,12 +201,20 @@ class Game implements GameParams
        return $data;
     }
 
+    /**
+     * @param int $euro
+     * @return int
+     */
     private function centsFrom(int $euro): int
     {
         return $Cents = $euro * 100;
     }
 
 
+    /**
+     * @param int $euro
+     * @return array
+     */
     public function playGame(int $euro = 1): array
     {
 
@@ -208,19 +222,7 @@ class Game implements GameParams
         $this->Run();
         $result = $this->data;
 
-
-
-        dd($result);
         return $result;
     }
-
-
-
-
-//board: [J, J, J, Q, K, cat, J, Q, monkey, bird, bird, bird, J, Q, A],
-//paylines: [{"0 3 6 9 12": 3}, {"0 4 8 10 12":3}],
-//bet_amount: 100,
-//total_win: 40,
-
 
 }
