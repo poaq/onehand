@@ -27,7 +27,7 @@ class startGame extends Command
             $amount = $this->argument('amount');
 
             $game = new Game();
-            $result = $game->generateTableView($amount);
+            dd($result = $game->playGame($amount));
 
             if ($amount < 1) {
                 $this->info("No money! Add amount of money in line. game:start {amount}");

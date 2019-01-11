@@ -14,6 +14,9 @@ use App\Interfaces\GameParams;
 class Game implements GameParams
 {
 
+    /**
+     * @var array
+     */
     private $results = [];
 
 
@@ -22,6 +25,9 @@ class Game implements GameParams
         return $this->create(self::Lines);
     }
 
+    /**
+     * @param int $lines
+     */
     private function create(int $lines = 3)
     {
         $result = [];
@@ -34,6 +40,12 @@ class Game implements GameParams
         return $this->createMapBoardFrom(array_merge(...$result));
     }
 
+    /**
+     * @param array $a
+     * @param int $i
+     * @param int $j
+     * @return array
+     */
     private function reroll(array $a , int $i , int $j):array
     {
         $tmp =  $a[$i];
@@ -54,8 +66,9 @@ class Game implements GameParams
     }
 
 
-
-
+    /**
+     * @param array $lines
+     */
     private function createMapBoardFrom(array $lines)
     {
         $reloadLines = $this->reroll($lines, 5,1);
@@ -82,17 +95,24 @@ class Game implements GameParams
         $this->findMatchesOn($result);
     }
 
-    private function setResults(array $array)
+    /**
+     * @param array $wins
+     */
+    private function setResults(array $wins)
     {
-        $this->results = $array;
+        $this->results = $wins;
     }
 
 
+    /**
+     * @param array $board
+     */
     private function findMatchesOn(array $board)
     {
 
         /** TODO: refactor this */
-        $results=[];
+        $data=[];
+
 
        foreach ($board as $lines)
        {
@@ -102,30 +122,33 @@ class Game implements GameParams
 
                if($val >= 3)
                {
-                   $wins += [$board,$val];
+                   $data += ['Result'=> 'Win', 'Count' => $val];
                }
-
-               $results += [$board,$val];
            }
        }
 
-        return $this->setResult($results);
+       $data += ['Board' => $board];
+
+
+       return $this->setResults($data);
     }
 
-
-    public function generateTableView(int $amount)
+    /**
+     * @param int $amount
+     * @return array
+     */
+    public function playGame(int $amount): array
     {
-        $wins =[];
+        $table =[];
 
         for($i = 0; $i < $amount; $i++)
         {
             $this->Run();
 
-            $wins[] = $this->wins;
+            $table[] = $this->results;
         }
 
-        return dd($wins);
-
+        return $table;
     }
 
 
