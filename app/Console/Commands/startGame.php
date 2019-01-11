@@ -8,33 +8,35 @@
 
 namespace App\Console\Commands;
 
+
+use App\Services\GameHandler;
 use Exception;
 use Illuminate\Console\Command;
-use App\Services\Game;
+
+
 
 class startGame extends Command
 {
 
 
-    protected $signature = "game:start {amount : The amount of money you want to spent}";
+    protected $signature = "game:start";
 
     protected $description = "game:start amount of money";
 
 
-    public function handle()
+
+    public function handle(GameHandler $handler)
     {
         try {
-            $amount = $this->argument('amount');
 
-            $game = new Game();
-            dd($result = $game->playGame($amount));
 
-            if ($amount < 1) {
-                $this->info("No money! Add amount of money in line. game:start {amount}");
-                return;
-            }
+            $amount = $this->ask('What amount you want to bet?');
+            $ewsult = $handler->playGame($amount);
 
-            $this->info($result);
+
+
+
+
         } catch (Exception $e) {
             $this->error("An error occurred");
         }

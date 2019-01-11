@@ -9,7 +9,7 @@
 namespace App\Services;
 
 use App\Services\Game;
-use App\Services\User;
+
 
 class GameHandler
 {
@@ -17,21 +17,27 @@ class GameHandler
      * @var Game
      */
     private $game;
-    /**
-     * @var User
-     */
-    private $user;
+
 
     public function __construct
     (
-        Game $game,
-        User $user
+        Game $game
     )
     {
         $this->game = $game;
-        $this->user = $user;
     }
 
+
+
+    public function playGame($bet)
+    {
+        return $this->game->playGame($bet);
+    }
+
+    public function play($multiple)
+    {
+        return $this->game->playMultipleGames($multiple);
+    }
 
 
 }

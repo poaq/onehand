@@ -17,7 +17,12 @@ class Game implements GameParams
     /**
      * @var array
      */
-    private $results = [];
+    private $data;
+
+    /**
+     * @var int
+     */
+    private $bet;
 
 
     private function Run()
@@ -27,6 +32,7 @@ class Game implements GameParams
 
     /**
      * @param int $lines
+     * @return array
      */
     private function create(int $lines = 3)
     {
@@ -68,6 +74,7 @@ class Game implements GameParams
 
     /**
      * @param array $lines
+     * @return array
      */
     private function createMapBoardFrom(array $lines)
     {
@@ -92,27 +99,85 @@ class Game implements GameParams
         ];
 
         $result = array_merge($BoardLines, $RecursiveLines);
-        $this->findMatchesOn($result);
+
+        return $this->createDataForProcessing($result, $BoardLines);
+
     }
 
-    /**
-     * @param array $wins
-     */
-    private function setResults(array $wins)
+    private function createDataForProcessing(array $Board, array $BoardLines)
     {
-        $this->results = $wins;
+
+        /** TODO: refactor on small parts */
+
+        $wins = $this->findMatchesOn($Board);
+
+        $reward = 0;
+
+        $bet = $this->bet;
+
+        if(count($wins) > 0) {
+        $reward = $this->checkValue($wins['Count']);
+        }
+
+        $won = $this->CalculateWin($bet, $reward);
+
+        $board['Board'] = array_merge(...$BoardLines);
+
+        if(!$wins){
+
+           $data = [
+               [
+                   self::Bet_amount => $bet,
+                   self::Paylines => 0,
+                   self::Total_win => $won,
+                   self::Board => array_first($board)
+               ]
+           ];
+
+           return $this->data = $data;
+        }
+        $Balance = [self::Total_win => $won];
+
+        $part1 = array_merge($wins, $Balance, $board);
+        $part2 = [self::Bet_amount => $bet];
+        $data = [array_merge($part2, $part1)];
+
+        return $this->data = $data;
     }
 
+
+    private function CalculateWin(int $bet, int $rewardRatio): int
+    {
+        return $value = $bet * $rewardRatio;
+    }
+
+    private function checkValue(int $value)
+    {
+        switch($value)
+        {
+            default:
+                return 0;
+                break;
+            case 3:
+                return 0.2;
+                break;
+            case 4:
+                return 2;
+                break;
+            case 5:
+                return 10;
+                break;
+        }
+    }
 
     /**
      * @param array $board
+     * @return array
      */
-    private function findMatchesOn(array $board)
+    private function findMatchesOn(array $board): array
     {
 
-        /** TODO: refactor this */
         $data=[];
-
 
        foreach ($board as $lines)
        {
@@ -122,46 +187,35 @@ class Game implements GameParams
 
                if($val >= 3)
                {
-                   $data += ['Result'=> 'Win', 'Count' => $val];
+                   $data += [self::Paylines => $lines, 'Count' => $val];
                }
            }
        }
 
-       $data += ['Board' => $board];
-
-
-       return $this->setResults($data);
+       return $data;
     }
 
-    /**
-     * @param int $amount
-     * @return array
-     */
-    public function playGame(int $amount): array
+    private function centsFrom(int $euro): int
     {
-        $table =[];
+        return $Cents = $euro * 100;
+    }
 
-        for($i = 0; $i < $amount; $i++)
-        {
-            $this->Run();
 
-            $table[] = $this->results;
-        }
+    public function playGame(int $euro = 1): array
+    {
 
-        return $table;
+        $this->bet = $this->centsFrom($euro);
+        $this->Run();
+        $result = $this->data;
+
+
+
+        dd($result);
+        return $result;
     }
 
 
 
-    //if 3 === $
-
-
-    // 3 symbols = 20% 4 = 200% 5 = 1000%
-
-//board: [0,....,14]
-//• paylines: Array with matched payline and number of matched symbol.
-//• bet_amount: monetary numbers in cents 1€ = 100cents. In you case is always 100
-//• total_win: amount won.
 
 //board: [J, J, J, Q, K, cat, J, Q, monkey, bird, bird, bird, J, Q, A],
 //paylines: [{"0 3 6 9 12": 3}, {"0 4 8 10 12":3}],
