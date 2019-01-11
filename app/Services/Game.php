@@ -14,8 +14,8 @@ use App\Interfaces\GameParams;
 class Game implements GameParams
 {
 
-    private $wins = [];
-    
+    private $results = [];
+
 
     private function Run()
     {
@@ -82,9 +82,9 @@ class Game implements GameParams
         $this->findMatchesOn($result);
     }
 
-    private function setWin(array $array)
+    private function setResults(array $array)
     {
-        $this->wins = $array;
+        $this->results = $array;
     }
 
 
@@ -92,7 +92,7 @@ class Game implements GameParams
     {
 
         /** TODO: refactor this */
-        $wins=[];
+        $results=[];
 
        foreach ($board as $lines)
        {
@@ -102,13 +102,14 @@ class Game implements GameParams
 
                if($val >= 3)
                {
-                   $wins[] = [$board,$val];
+                   $wins += [$board,$val];
                }
+
+               $results += [$board,$val];
            }
        }
 
-
-        return $this->setWin($wins);
+        return $this->setResult($results);
     }
 
 
