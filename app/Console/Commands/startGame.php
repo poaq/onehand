@@ -10,7 +10,7 @@ namespace App\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-
+use App\Services\Game;
 
 class startGame extends Command
 {
@@ -26,12 +26,15 @@ class startGame extends Command
         try {
             $amount = $this->argument('amount');
 
+            $game = new Game();
+            $result = $game->generateTableView($amount);
+
             if ($amount < 1) {
                 $this->info("No money! Add amount of money in line. game:start {amount}");
                 return;
             }
 
-            $this->info($amount);
+            $this->info($result);
         } catch (Exception $e) {
             $this->error("An error occurred");
         }
