@@ -11,4 +11,4 @@ next answer on question with int
 1 = 1 euro
 1 = 100 cents
 
-Project isnt build on matrix and state pattern. 
+Project isnt build on matrix and state pattern, i wanted explore new things. 
